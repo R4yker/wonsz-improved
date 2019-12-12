@@ -14,7 +14,24 @@
 		<h6>press SPACE to start</h6>
 	</div>
 	<div class="wrap disabled" id="game-screen">
-		<div id="ui"></div>
+		<div id="ui">
+			<div class="row space-around">
+				<div class="col">
+					<div class="row space-around">
+						<span>points:</span>
+						<span id="points"></span>
+					</div>
+				</div>
+				<div class="col">
+					<div class="row space-around">
+						<span>length:</span>
+						<span id="length"></span>
+						<span>speed:</span>
+						<span id="speed"></span>
+					</div>
+				</div>
+			</div>
+		</div>
 		<canvas id="game"></canvas>
 	</div>
 	<div class="wrap disabled" id="end-screen">

@@ -24,3 +24,18 @@ html, body, .wrap{
 .disabled{
 	display: none;
 }
+
+.row{
+	display: flex;
+	flex-direction: row;
+}
+
+.space-around{
+	justify-content: space-around;
+}
+
+.col{
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+}
