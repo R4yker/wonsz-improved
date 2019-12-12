@@ -81,25 +81,89 @@ function move() {
 	if(x >= board.width) gameOver();
 	if(y >= board.height) gameOver();
 
+	let dontRemoveTail = false;
+
+	objects.forEach( object => {
+		if(x === object.x && y === object.y){
+			// wonsz wszedł w obiekt
+			if(object.type==="apple"){
+				stats.points++;
+				object.exp = 0;
+				dontRemoveTail = true;
+			}
+		}
+	} )
+
 	/* dodanie głowy wonsza */
 	snake.addHead(x, y);
 
 
 	/* usunięcie ogona wonsza */
-	snake.removeTail();
+	if(!dontRemoveTail) snake.removeTail();
 }
 
 let gameState = 'not-started';
 const stats = {
-	speed: 3, // kwadraty pokonywane na sekundę
+	speed: 5, // kwadraty pokonywane na sekundę
 	points: 0 // zebrane punkty
+}
+
+const jakiśObiekt = {
+	type:"apple",
+	x: 10,
+	y: 10,
+	exp: 0
+}
+let objects = [];
+
+
+function renderObject(object){
+	const colors = {
+		apple: "green",
+		trap : "brown"
+	}
+	ctx.fillStyle = colors[object.type];
+	ctx.fillRect(	display.offsetX + object.x * display.cellSize,
+						display.offsetY + object.y * display.cellSize,
+						display.cellSize,
+						display.cellSize);
+}
+function renderObjects() {
+	objects.forEach(renderObject);
+}
+
+
+function rand(min, max) {
+	return Math.floor(Math.random() * (max-min + 1) + min);
+}
+
+const output = {
+	speed:document.querySelector("#speed"),
+	points:document.querySelector("#points"),
+	length:document.querySelector("#length")
 }
 
 let timeoutID = 0;
 function step() {
 	move()// przesunąć wonsza
 	board.render()// narysować planszę
+	renderObjects();
 	snake.render()// narysować wonsza
+
+	output.speed.innerText = stats.speed;
+
+	objects = objects.filter( obiekt => obiekt.exp > Date.now() );
+
+	if (rand(1,10) === 10) {
+		let x = rand(0,board.width - 1);
+		let y = rand(0,board.height - 1);
+		objects.push({
+			type:"apple",
+			x,
+			y,
+			exp: Date.now() + rand(2000,10000)
+		})
+	}
 
 	// policzenie iedy wykonać kolejny krok
 	const nextStepTimeout = 1000 * (1 / stats.speed);
